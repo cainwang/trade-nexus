@@ -30,7 +30,7 @@ public class NasdaqOptionProfileProbe implements StockProfileProbe {
 
     @Override
     public NasdaqOptionProfile probe(String symbol) {
-        String url = "http://www.nasdaq.com/symbol/" + symbol + "/option-chain";
+        String url = "http://www.nasdaq.com/symbol/" + symbol + "/option-chain?dateindex=-1";
         logger.info("Fetching nasdaq option chain: " + url);
 
         HtmlParser parser = new HtmlParser(url);
@@ -40,17 +40,17 @@ public class NasdaqOptionProfileProbe implements StockProfileProbe {
         if (strike != null) {
             Elements columns = strike.select("td");
             Element strikePriceColumn = columns.get(columns.size() / 2);
-            double atmStrikePrice = StockProfile.parseNumber(strikePriceColumn.text());
+            double atmStrikePrice = StockProfile.parseDouble(strikePriceColumn.text());
             profile.setAtmPrice(atmStrikePrice);
 
             profile.setNextExpirationDate(parseExpirationDate(columns.first().text()));
 
             Element callPriceColumn = columns.get(1);
-            double callPrice = StockProfile.parseNumber(callPriceColumn.text());
+            double callPrice = StockProfile.parseDouble(callPriceColumn.text());
             profile.setCallPrice(callPrice);
 
             Element putPriceColumn = columns.get(10);
-            double putPrice = StockProfile.parseNumber(putPriceColumn.text());
+            double putPrice = StockProfile.parseDouble(putPriceColumn.text());
             profile.setPutPrice(putPrice);
 
             double distance = callPrice + putPrice;
@@ -71,14 +71,15 @@ public class NasdaqOptionProfileProbe implements StockProfileProbe {
             Element strike = strikes.get(i);
             Elements values = strike.select("td");
 
-            if (!values.isEmpty()) {
+            // Skip table rows of expiration date.
+            if (values.size() > 1) {
                 // If has future ITM put, find the previous strike price with
                 // future IMT call.
                 if (isInFuture(values.first().text()) && isITM(values.last()) && i > 0) {
                     Element previousStrike = strikes.get(i - 1);
                     Element previousFirstValue = previousStrike.select("td").first();
 
-                    if (isInFuture(previousFirstValue.text()) && isITM(previousFirstValue)) {
+                    if (isInFuture(previousFirstValue.text())) {
                         return previousStrike;
                     }
                 }

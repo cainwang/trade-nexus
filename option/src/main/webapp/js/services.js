@@ -125,6 +125,7 @@ services.factory('Earnings', [ 'Rests', 'Profiles', 'Dates', function(Rests, Pro
                 Profiles.findZacksProfile(entry);
                 Profiles.findMarketWatchProfile(entry);
                 Profiles.findEstimizeProfile(entry);
+                Profiles.findShortInterest(entry);
             }
         }
     }
@@ -165,55 +166,75 @@ services.factory('Profiles', [ 'Rests', function(Rests) {
         /**
          * Finds the Nasdaq profile for the specified stock.
          */
-        findNasdaqProfile: function(earningEntry) {
+        findNasdaqProfile: function(stockEntry) {
             Rests.get('api/profile/nasdaq/:symbol', {
-                symbol: earningEntry.symbol
+                symbol: stockEntry.symbol
             }, function(profile) {
-                earningEntry.nasdaqProfile = profile;
+                stockEntry.nasdaqProfile = profile;
             });
         },
 
         /**
          * Finds the Nasdaq options profile for the specified stock.
          */
-        findNasdaqOptionProfile: function(earningEntry) {
+        findNasdaqOptionProfile: function(stockEntry) {
             Rests.get('api/profile/nasdaq/option/:symbol', {
-                symbol: earningEntry.symbol
+                symbol: stockEntry.symbol
             }, function(profile) {
-                earningEntry.nasdaqOptionProfile = profile;
+                stockEntry.nasdaqOptionProfile = profile;
             });
         },
 
         /**
          * Finds Zacks profile for the specified stock.
          */
-        findZacksProfile: function(earningEntry) {
+        findZacksProfile: function(stockEntry) {
             Rests.get('api/profile/zacks/:symbol', {
-                symbol: earningEntry.symbol
+                symbol: stockEntry.symbol
             }, function(profile) {
-                earningEntry.zacksProfile = profile;
+                stockEntry.zacksProfile = profile;
             });
         },
 
         /**
          * Finds MarketWatch profile for the stock.
          */
-        findMarketWatchProfile: function(earningEntry) {
+        findMarketWatchProfile: function(stockEntry) {
             Rests.get('api/profile/marketwatch/:symbol', {
-                symbol: earningEntry.symbol
+                symbol: stockEntry.symbol
             }, function(profile) {
-                earningEntry.marketWatchProfile = profile;
+                stockEntry.marketWatchProfile = profile;
             });
         },
 
         /**
          * Finds estimize profile for the stock.
          */
-        findEstimizeProfile: function(earningEntry) {
+        findEstimizeProfile: function(stockEntry) {
             Rests.get('api/profile/estimize/:symbol', {
-                symbol: earningEntry.symbol
+                symbol: stockEntry.symbol
             }, function(profile) {
-                earningEntry.estimizeProfile = profile;
+                stockEntry.estimizeProfile = profile;
+            });
+        },
+
+        /**
+         * Finds the US stock future index.
+         */
+        findFuture: function(callback) {
+            return Rests.get('api/profile/us-future', {}, function(profile) {
+                callback(profile);
+            });
+        },
+
+        /**
+         * Finds the stock short interest.
+         */
+        findShortInterest: function(stockEntry) {
+            Rests.get('api/profile/nasdaq/short-interest/:symbol', {
+                symbol: stockEntry.symbol
+            }, function(profile) {
+                stockEntry.shortInterestProfile = profile;
             });
         }
     };

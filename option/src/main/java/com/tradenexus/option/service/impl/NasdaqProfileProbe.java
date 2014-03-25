@@ -32,18 +32,18 @@ public class NasdaqProfileProbe implements StockProfileProbe {
         NasdaqProfile profile = new NasdaqProfile(symbol, url);
         String lastSale = parser.text("div#qwidget_lastsale");
         if (StringUtils.isNoneBlank(lastSale) && lastSale.startsWith("$")) {
-            profile.setLastPrice(StockProfile.parseNumber(lastSale.substring(1)));
+            profile.setLastPrice(StockProfile.parseDouble(lastSale.substring(1)));
         }
 
         Element reportTable = parser.first("#quotes_content_left_pnlContent table");
         String yearHighText = parser.text(reportTable, "tr:nth-of-type(2) td:nth-of-type(1)");
-        profile.setYearHigh(StockProfile.parseNumber(yearHighText));
+        profile.setYearHigh(StockProfile.parseDouble(yearHighText));
 
         String yearLowText = parser.text(reportTable, "tr:nth-of-type(2) td:nth-of-type(2)");
-        profile.setYearLow(StockProfile.parseNumber(yearLowText));
+        profile.setYearLow(StockProfile.parseDouble(yearLowText));
 
         String outstandingSharesText = parser.text(reportTable, "tr:nth-of-type(4) td:nth-of-type(2)");
-        profile.setOutstandingShares(StockProfile.parseNumber(outstandingSharesText));
+        profile.setOutstandingShares(StockProfile.parseLong(outstandingSharesText));
 
         return profile;
     }

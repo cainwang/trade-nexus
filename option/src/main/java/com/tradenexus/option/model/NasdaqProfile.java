@@ -16,7 +16,7 @@ public class NasdaqProfile extends StockProfile {
 
     private double yearHigh;
 
-    private double outstandingShares;
+    private long outstandingShares;
 
     public NasdaqProfile(String symbol, String referenceUrl) {
         super(symbol, referenceUrl);
@@ -46,11 +46,11 @@ public class NasdaqProfile extends StockProfile {
         this.yearHigh = yearHigh;
     }
 
-    public double getOutstandingShares() {
+    public long getOutstandingShares() {
         return outstandingShares;
     }
 
-    public void setOutstandingShares(double marketCap) {
+    public void setOutstandingShares(long marketCap) {
         this.outstandingShares = marketCap;
     }
 

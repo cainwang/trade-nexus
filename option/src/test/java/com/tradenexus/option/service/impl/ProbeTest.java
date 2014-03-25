@@ -5,6 +5,8 @@ package com.tradenexus.option.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradenexus.option.model.StockProfile;
+import com.tradenexus.option.model.IndexFutureProfile;
+import com.tradenexus.option.service.IndexFutureProbe;
 import com.tradenexus.option.service.StockProfileProbe;
 
 /**
@@ -21,7 +23,7 @@ public class ProbeTest {
     }
 
     private void testProfileProbe() throws Exception {
-        StockProfile profile = new ProbeTest().testZacks();
+        Object profile = new ProbeTest().testShort();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(System.out, profile);
@@ -39,11 +41,21 @@ public class ProbeTest {
 
     private StockProfile testNasdaqOption() {
         StockProfileProbe probe = new NasdaqOptionProfileProbe();
-        return probe.probe("VMW");
+        return probe.probe("RHT");
     }
 
     private StockProfile testZacks() {
         StockProfileProbe probe = new ZacksProfileProbe();
         return probe.probe("TIF");
+    }
+
+    private IndexFutureProfile testFuture() {
+        IndexFutureProbe probe = new IndexFutureProbeImpl();
+        return probe.probe();
+    }
+
+    private StockProfile testShort() {
+        StockProfileProbe probe = new ShortInterestProbe();
+        return probe.probe("VMW");
     }
 }

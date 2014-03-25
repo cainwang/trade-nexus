@@ -9,6 +9,13 @@
         <button type="button" class="btn btn-default" ng-click="goToNextWeekEarnings()">
             Next Week <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
+
+        <div class="future">
+            <span class="future-label">Dow Jones Future</span>
+            <span ng-class="indexFutureProfile.dowJones >= 0 ? 'future-up' : 'future-down'">
+                {{indexFutureProfile.dowJones}}
+            </span>
+        </div>
     </div>
 
     <table class="table table-hover earning-table">
@@ -18,14 +25,16 @@
                 <th>Report Time</th>
                 <th>Quotes</th>
                 <th>Options</th>
+                <th>Short Interest</th>
                 <th>Zacks</th>
                 <th>MarketWatch</th>
                 <th>Estimize</th>
+                <th>Links</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat-start="earningDay in earningDays" class="earning-today">
-                <td colspan="7" class="earning-date-header">
+                <td colspan="9" class="earning-date-header">
                     {{earningDay.date | weekDay}}
                     <span class="glyphicon glyphicon-refresh" ng-show="earningDay.loading"></span>
                     <span ng-show="earningDay.isToday">(Today)</span>
@@ -50,7 +59,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <a ng-href="{{earningEntry.zacksProfile.referenceUrl}}" target="_blank">source</a>
+                                <a ng-href="{{earningEntry.nasdaqProfile.referenceUrl}}" target="_blank">source</a>
                             </td>
                         </tr>
                     </table>
@@ -70,14 +79,14 @@
                             <td>ATM Call Price</td>
                             <td>
                                 {{earningEntry.nasdaqOptionProfile.callPrice}}
-                                ({{earningEntry.nasdaqOptionProfile.callPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}} %)
+                                ({{earningEntry.nasdaqOptionProfile.callPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}})
                             </td>
                         </tr>
                         <tr>
                             <td>ATM Put Price</td>
                             <td>
                                 {{earningEntry.nasdaqOptionProfile.putPrice}}
-                                ({{earningEntry.nasdaqOptionProfile.putPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}} %)
+                                ({{earningEntry.nasdaqOptionProfile.putPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}})
                             </td>
                         </tr>
                         <tr>
@@ -89,6 +98,19 @@
                             <td>{{earningEntry.nasdaqOptionProfile.straddleHighBound}}</td>
                         </tr>
                     </table>
+                </td>
+
+                <td>
+                    <div ng-show="earningEntry.shortInterestProfile">
+                        <div>{{earningEntry.shortInterestProfile.shortInterest | number}}</div>
+                        <div>
+                            {{earningEntry.shortInterestProfile.shortInterest / earningEntry.nasdaqProfile.outstandingShares | percentage}}
+                            Float
+                        </div>
+                        <div>
+                            <a ng-href="{{earningEntry.shortInterestProfile.referenceUrl}}" target="_blank">source</a>
+                        </div>
+                    </div>
                 </td>
 
                 <td>
@@ -155,11 +177,11 @@
                         </tr>
                         <tr>
                             <td>Estimize Revenue</td>
-                            <td>{{earningEntry.estimizeProfile.estimizeRevenue}}</td>
+                            <td>{{earningEntry.estimizeProfile.estimizeRevenue | number}}</td>
                         </tr>
                         <tr>
                             <td>WS Revenue</td>
-                            <td>{{earningEntry.estimizeProfile.wsRevenue}}</td>
+                            <td>{{earningEntry.estimizeProfile.wsRevenue | number}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -167,6 +189,15 @@
                             </td>
                         </tr>
                     </table>
+                </td>
+
+                <td>
+                    <div>
+                        <a ng-href="http://seekingalpha.com/symbol/{{earningEntry.symbol}}" target="_blank">Seeking Alpha</a>
+                    </div>
+                    <div>
+                        <a ng-href="https://us.etrade.com/optionanalytics/?sym={{earningEntry.symbol}}" target="_blank">Etrade Options</a>
+                    </div>
                 </td>
             </tr>
         </tbody>

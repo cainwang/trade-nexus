@@ -94,6 +94,10 @@ public class HtmlParser {
      * Finds the text of the first element matched by the selector expression.
      */
     public String text(Element root, String selector) {
-        return first(root, selector).text();
+        Element el = first(root, selector);
+        if (el != null) {
+            return el.text();
+        }
+        return "";
     }
 }

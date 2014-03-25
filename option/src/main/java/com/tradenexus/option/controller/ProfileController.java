@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tradenexus.option.model.Response;
+import com.tradenexus.option.service.IndexFutureProbe;
 import com.tradenexus.option.service.StockProfileProbe;
 
 /**
@@ -41,28 +41,45 @@ public class ProfileController {
     @Qualifier("nasdaqOptionProfileProbe")
     private StockProfileProbe nasdaqOptionProfileProbe;
 
+    @Autowired
+    @Qualifier("shortInterestProbe")
+    private StockProfileProbe shortInterestProbe;
+
+    @Autowired
+    private IndexFutureProbe indexFutureProbe;
+
     @RequestMapping(value = "/zacks/{symbol}", method = RequestMethod.GET)
-    public Response findZacksProfile(@PathVariable("symbol") String symbol) {
-        return new Response(zacksProfileProbe.probe(symbol));
+    public Object findZacksProfile(@PathVariable("symbol") String symbol) {
+        return zacksProfileProbe.probe(symbol);
     }
 
     @RequestMapping(value = "/marketwatch/{symbol}", method = RequestMethod.GET)
-    public Response findMarketWatchProfile(@PathVariable("symbol") String symbol) {
-        return new Response(marketWatchProfileProbe.probe(symbol));
+    public Object findMarketWatchProfile(@PathVariable("symbol") String symbol) {
+        return marketWatchProfileProbe.probe(symbol);
     }
 
     @RequestMapping(value = "/estimize/{symbol}")
-    public Response findEstimizeProfile(@PathVariable("symbol") String symbol) {
-        return new Response(estimizeProfileProbe.probe(symbol));
+    public Object findEstimizeProfile(@PathVariable("symbol") String symbol) {
+        return estimizeProfileProbe.probe(symbol);
     }
 
     @RequestMapping(value = "/nasdaq/{symbol}")
-    public Response findNasdaqProfile(@PathVariable("symbol") String symbol) {
-        return new Response(nasdaqProfileProbe.probe(symbol));
+    public Object findNasdaqProfile(@PathVariable("symbol") String symbol) {
+        return nasdaqProfileProbe.probe(symbol);
     }
 
     @RequestMapping(value = "/nasdaq/option/{symbol}")
-    public Response findNasdaqOptionProfile(@PathVariable("symbol") String symbol) {
-        return new Response(nasdaqOptionProfileProbe.probe(symbol));
+    public Object findNasdaqOptionProfile(@PathVariable("symbol") String symbol) {
+        return nasdaqOptionProfileProbe.probe(symbol);
+    }
+
+    @RequestMapping(value = "/us-future")
+    public Object findIndexFuture() {
+        return indexFutureProbe.probe();
+    }
+
+    @RequestMapping(value = "/nasdaq/short-interest/{symbol}")
+    public Object findShortInterest(@PathVariable("symbol") String symbol) {
+        return shortInterestProbe.probe(symbol);
     }
 }

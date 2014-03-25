@@ -7,7 +7,7 @@ var controllers = angular.module('optionNexusControllers', []);
 controllers.controller('ChromeCtrl', function($scope) {
 });
 
-function earningCtrl($scope, Earnings, Langs, Dates) {
+function earningCtrl($scope, Earnings, Profiles, Langs, Dates) {
     $scope.goToWeekEarnings = function(date) {
         $scope.currentDate = date;
         $scope.earningDays = Earnings.findWeekEarnings(date);
@@ -33,5 +33,8 @@ function earningCtrl($scope, Earnings, Langs, Dates) {
     };
 
     $scope.goToThisWeekEarnings();
+    Profiles.findFuture(function(indexFutureProfile) {
+        $scope.indexFutureProfile = indexFutureProfile;
+    });
 }
-controllers.controller('EarningCtrl', [ '$scope', 'Earnings', 'Langs', 'Dates', earningCtrl ]);
+controllers.controller('EarningCtrl', [ '$scope', 'Earnings', 'Profiles', 'Langs', 'Dates', earningCtrl ]);

@@ -40,16 +40,37 @@ public class StockProfile {
         this.symbol = symbol;
     }
 
-    public static double parseNumber(String numberString) {
+    /**
+     * Parses the string to number.
+     */
+    public static Number parseNumber(String numberString) {
+        if (numberString.startsWith("+") || numberString.startsWith("-")) {
+            numberString = numberString.substring(1);
+        }
+
         try {
             if (!StringUtil.isBlank(numberString)) {
-                return NumberFormat.getInstance().parse(numberString.trim()).doubleValue();
+                return NumberFormat.getInstance().parse(numberString.trim());
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return 0;
+    }
+
+    /**
+     * Parses the string to double.
+     */
+    public static double parseDouble(String numberString) {
+        return parseNumber(numberString).doubleValue();
+    }
+
+    /**
+     * Parses the string to long.
+     */
+    public static long parseLong(String numberString) {
+        return parseNumber(numberString).longValue();
     }
 
     public String getReferenceUrl() {

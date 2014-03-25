@@ -31,7 +31,7 @@ public class MarketWatchProfileProbe implements StockProfileProbe {
         MarketWatchProfile profile = new MarketWatchProfile(symbol, url);
 
         String averageTargetPrice = parser.last("table.snapshot tbody tr td").text();
-        profile.setAverageTargetPrice(StockProfile.parseNumber(averageTargetPrice));
+        profile.setAverageTargetPrice(StockProfile.parseLong(averageTargetPrice));
 
         Element ratingTableEl = parser.first("table.ratings");
         profile.setBuys(findRatingCount(parser, ratingTableEl, 1));

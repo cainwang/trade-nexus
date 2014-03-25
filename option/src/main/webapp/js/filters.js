@@ -34,7 +34,7 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
 }).filter('percentage', function() {
     return function(input) {
         if (!isNaN(input)) {
-            return (input * 100).toFixed(2);
+            return (input * 100).toFixed(2) + '%';
         }
 
         return '';

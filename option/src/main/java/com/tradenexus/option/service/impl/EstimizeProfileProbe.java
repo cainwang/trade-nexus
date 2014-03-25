@@ -33,15 +33,15 @@ public class EstimizeProfileProbe implements StockProfileProbe {
         String estimizeEps = parser.text(estimizeConsensusEl, ".eps");
         String estimizeRevenue = parser.text(estimizeConsensusEl, ".revenue");
 
-        profile.setEstimizeEps(StockProfile.parseNumber(estimizeEps));
-        profile.setEstimizeRevenue(StockProfile.parseNumber(estimizeRevenue));
+        profile.setEstimizeEps(StockProfile.parseLong(estimizeEps));
+        profile.setEstimizeRevenue(StockProfile.parseLong(estimizeRevenue));
 
         Element wsConsensusEl = parser.first(".wall-street-consensus");
         String wsEps = parser.text(wsConsensusEl, ".eps");
         String wsRevenue = parser.text(wsConsensusEl, ".revenue");
 
-        profile.setWsEps(StockProfile.parseNumber(wsEps));
-        profile.setWsRevenue(StockProfile.parseNumber(wsRevenue));
+        profile.setWsEps(StockProfile.parseLong(wsEps));
+        profile.setWsRevenue(StockProfile.parseLong(wsRevenue));
 
         return profile;
     }

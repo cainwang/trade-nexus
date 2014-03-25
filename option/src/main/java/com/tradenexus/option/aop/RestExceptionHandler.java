@@ -26,7 +26,7 @@ public class RestExceptionHandler {
     @Around("com.tradenexus.option.aop.SystemArchitecture.controllerRestMethod()")
     public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
         try {
-            return pjp.proceed();
+            return new Response(pjp.proceed());
         } catch (NexusException e) {
             String message = e.getMessage();
             logger.warning(message);

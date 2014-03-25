@@ -11,7 +11,7 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
         }
 
         return input;
-    }
+    };
 }).filter('zacksRankColor', function() {
     return function(input) {
         return {
@@ -38,7 +38,7 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
         }
 
         return '';
-    }
+    };
 }).filter('weekDay', function() {
     return function(input) {
         if (input) {
@@ -50,5 +50,14 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
         }
 
         return '';
-    }
+    };
+}).filter('signedNumber', function() {
+    return function(input) {
+        if (!isNaN(input)) {
+            var sign = input >= 0 ? '+' : '-';
+            return sign + input;
+        }
+
+        return '';
+    };
 });

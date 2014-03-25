@@ -1,19 +1,25 @@
 <div ng-controller="EarningCtrl">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default" ng-click="goToPreviousWeekEarnings()">
-            <span class="glyphicon glyphicon-chevron-left"></span> Previous Week
-        </button>
-        <button type="button" class="btn btn-default" ng-click="goToThisWeekEarnings()">
-            <span class="glyphicon glyphicon-calendar"></span> This Week
-        </button>
-        <button type="button" class="btn btn-default" ng-click="goToNextWeekEarnings()">
-            Next Week <span class="glyphicon glyphicon-chevron-right"></span>
-        </button>
+    <div>
+        <h3 class="earning-tool label label-info earning-report-title">
+            Earnings Calendar
+        </h3>
 
-        <div class="future">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-click="goToPreviousWeekEarnings()">
+                <span class="glyphicon glyphicon-chevron-left"></span> Previous Week
+            </button>
+            <button type="button" class="btn btn-default" ng-click="goToThisWeekEarnings()">
+                <span class="glyphicon glyphicon-calendar"></span> This Week
+            </button>
+            <button type="button" class="btn btn-default" ng-click="goToNextWeekEarnings()">
+                Next Week <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    
+        <div class="earning-tool">
             <span class="future-label">Dow Jones Future</span>
             <span ng-class="indexFutureProfile.dowJones >= 0 ? 'future-up' : 'future-down'">
-                {{indexFutureProfile.dowJones}}
+                {{indexFutureProfile.dowJones | signedNumber}}
             </span>
         </div>
     </div>

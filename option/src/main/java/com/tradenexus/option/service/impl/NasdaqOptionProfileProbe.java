@@ -1,0 +1,115 @@
+/**
+ *
+ */
+package com.tradenexus.option.service.impl;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Logger;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
+
+import com.tradenexus.exception.NexusException;
+import com.tradenexus.option.model.NasdaqOptionProfile;
+import com.tradenexus.option.model.StockProfile;
+import com.tradenexus.option.service.StockProfileProbe;
+import com.tradenexus.option.util.HtmlParser;
+
+/**
+ * This class finds the stock option profile from the nasdaq.
+ *
+ * @author Cain
+ */
+@Service("nasdaqOptionProfileProbe")
+public class NasdaqOptionProfileProbe implements StockProfileProbe {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
+    @Override
+    public NasdaqOptionProfile probe(String symbol) {
+        String url = "http://www.nasdaq.com/symbol/" + symbol + "/option-chain";
+        logger.info("Fetching nasdaq option chain: " + url);
+
+        HtmlParser parser = new HtmlParser(url);
+        NasdaqOptionProfile profile = new NasdaqOptionProfile(symbol, url);
+
+        Element strike = findAtmStrike(parser);
+        if (strike != null) {
+            Elements columns = strike.select("td");
+            Element strikePriceColumn = columns.get(columns.size() / 2);
+            double atmStrikePrice = StockProfile.parseNumber(strikePriceColumn.text());
+            profile.setAtmPrice(atmStrikePrice);
+
+            profile.setNextExpirationDate(parseExpirationDate(columns.first().text()));
+
+            Element callPriceColumn = columns.get(1);
+            double callPrice = StockProfile.parseNumber(callPriceColumn.text());
+            profile.setCallPrice(callPrice);
+
+            Element putPriceColumn = columns.get(10);
+            double putPrice = StockProfile.parseNumber(putPriceColumn.text());
+            profile.setPutPrice(putPrice);
+
+            double distance = callPrice + putPrice;
+            profile.setStraddleLowBound(atmStrikePrice - distance);
+            profile.setStraddleHighBound(atmStrikePrice + distance);
+        }
+
+        return profile;
+    }
+
+    /**
+     * Finds the ATM option.
+     */
+    private Element findAtmStrike(HtmlParser parser) {
+        Elements strikes = parser.selectAll(".OptionsChain-chart tbody tr");
+
+        for (int i = 0; i < strikes.size(); i++) {
+            Element strike = strikes.get(i);
+            Elements values = strike.select("td");
+
+            if (!values.isEmpty()) {
+                // If has future ITM put, find the previous strike price with
+                // future IMT call.
+                if (isInFuture(values.first().text()) && isITM(values.last()) && i > 0) {
+                    Element previousStrike = strikes.get(i - 1);
+                    Element previousFirstValue = previousStrike.select("td").first();
+
+                    if (isInFuture(previousFirstValue.text()) && isITM(previousFirstValue)) {
+                        return previousStrike;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * If the specified date is in the future.
+     */
+    private boolean isInFuture(String dateString) {
+        return parseExpirationDate(dateString).compareTo(new Date()) > 0;
+    }
+
+    /**
+     * Parses the expiration date string.
+     */
+    private Date parseExpirationDate(String dateString) {
+        try {
+            return new SimpleDateFormat("MMM d, yyyy").parse(dateString);
+        } catch (ParseException e) {
+            throw new NexusException("Error parsing option expiration date.", e);
+        }
+    }
+
+    /**
+     * If the table cell's strike price is out of the moeny.
+     */
+    private boolean isITM(Element element) {
+        return StringUtils.isNotBlank(element.attr("bgcolor"));
+    }
+}

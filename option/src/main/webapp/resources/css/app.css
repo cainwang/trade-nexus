@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.earning-date-header {
+    border-left: 3px solid #5bc0de;
+}
+
+.earning-table td:first-of-type {
+    padding-right: 15px;
+}
+
+.earning-today {
+    color: #5bc0de;
+}
+
+.rating-buy {
+    color: #093;
+}
+
+.rating-overweight {
+    color: #5cb85c;
+}
+
+.rating-hold {
+    color: #5bc0de;
+}
+
+.rating-underweight {
+    color: #f0ad4e;
+}
+
+.rating-sell {
+    color: #d9534f;
+}

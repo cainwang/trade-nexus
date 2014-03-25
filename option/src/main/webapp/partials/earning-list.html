@@ -1,0 +1,174 @@
+<div ng-controller="EarningCtrl">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="goToPreviousWeekEarnings()">
+            <span class="glyphicon glyphicon-chevron-left"></span> Previous Week
+        </button>
+        <button type="button" class="btn btn-default" ng-click="goToThisWeekEarnings()">
+            <span class="glyphicon glyphicon-calendar"></span> This Week
+        </button>
+        <button type="button" class="btn btn-default" ng-click="goToNextWeekEarnings()">
+            Next Week <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+    </div>
+
+    <table class="table table-hover earning-table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Report Time</th>
+                <th>Quotes</th>
+                <th>Options</th>
+                <th>Zacks</th>
+                <th>MarketWatch</th>
+                <th>Estimize</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="earningDay in earningDays" class="earning-today">
+                <td colspan="7" class="earning-date-header">
+                    {{earningDay.date | weekDay}}
+                    <span class="glyphicon glyphicon-refresh" ng-show="earningDay.loading"></span>
+                    <span ng-show="earningDay.isToday">(Today)</span>
+                </td>
+            </tr>
+            <tr ng-repeat-end ng-repeat="earningEntry in earningDay.earningEntries">
+                <td>
+                    <a href="http://stockcharts.com/h-sc/ui?s={{earningEntry.symbol}}" target="_blank">{{earningEntry.symbol}}</a>
+                </td>
+
+                <td>{{earningEntry.reportTime | reportTime}}</td>
+
+                <td>
+                    <table ng-show="earningEntry.nasdaqProfile">
+                        <tr>
+                            <td>Quote</td>
+                            <td>{{earningEntry.nasdaqProfile.lastPrice}}</td>
+                        </tr>
+                        <tr>
+                            <td>52 Week</td>
+                            <td>{{earningEntry.nasdaqProfile.yearLow}} - {{earningEntry.nasdaqProfile.yearHigh}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a ng-href="{{earningEntry.zacksProfile.referenceUrl}}" target="_blank">source</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table ng-show="earningEntry.nasdaqOptionProfile">
+                        <tr>
+                            <td>Expiration Date</td>
+                            <td>{{earningEntry.nasdaqOptionProfile.nextExpirationDate | weekDay}}</td>
+                        </tr>
+                        <tr>
+                            <td>ATM Strick Price</td>
+                            <td>{{earningEntry.nasdaqOptionProfile.atmPrice}}</td>
+                        </tr>
+                        <tr>
+                            <td>ATM Call Price</td>
+                            <td>
+                                {{earningEntry.nasdaqOptionProfile.callPrice}}
+                                ({{earningEntry.nasdaqOptionProfile.callPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}} %)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ATM Put Price</td>
+                            <td>
+                                {{earningEntry.nasdaqOptionProfile.putPrice}}
+                                ({{earningEntry.nasdaqOptionProfile.putPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}} %)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Low Mark</td>
+                            <td>{{earningEntry.nasdaqOptionProfile.straddleLowBound}}</td>
+                        </tr>
+                        <tr>
+                            <td>High Mark</td>
+                            <td>{{earningEntry.nasdaqOptionProfile.straddleHighBound}}</td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table ng-show="earningEntry.zacksProfile">
+                        <tr>
+                            <td>Rank</td>
+                            <td ng-class="earningEntry.zacksProfile.rank | zacksRankColor">{{earningEntry.zacksProfile.rank}}</td>
+                        </tr>
+                        <tr>
+                            <td>ESP</td>
+                            <td ng-class="earningEntry.zacksProfile.earningSurprise | zacksESPColor">{{earningEntry.zacksProfile.earningSurprise}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a ng-href="{{earningEntry.zacksProfile.referenceUrl}}" target="_blank">source</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table ng-show="earningEntry.marketWatchProfile">
+                        <tr>
+                            <td>Average Target</td>
+                            <td>{{earningEntry.marketWatchProfile.averageTargetPrice}}</td>
+                        </tr>
+                        <tr ng-show="earningEntry.marketWatchProfile.buys" class="rating-buy">
+                            <td>Buy</td>
+                            <td>{{earningEntry.marketWatchProfile.buys}}</td>
+                        </tr>
+                        <tr ng-show="earningEntry.marketWatchProfile.overweights" class="rating-overweight">
+                            <td>Overweight</td>
+                            <td>{{earningEntry.marketWatchProfile.overweights}}</td>
+                        </tr>
+                        <tr ng-show="earningEntry.marketWatchProfile.holds" class="rating-hold">
+                            <td>Hold</td>
+                            <td>{{earningEntry.marketWatchProfile.holds}}</td>
+                        </tr>
+                        <tr ng-show="earningEntry.marketWatchProfile.underweights" class="rating-underweight">
+                            <td>Underweight</td>
+                            <td>{{earningEntry.marketWatchProfile.underweights}}</td>
+                        </tr>
+                        <tr ng-show="earningEntry.marketWatchProfile.sells" class="rating-sell">
+                            <td>Sell</td>
+                            <td>{{earningEntry.marketWatchProfile.sells}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a ng-href="{{earningEntry.marketWatchProfile.referenceUrl}}" target="_blank">source</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table ng-show="earningEntry.estimizeProfile">
+                        <tr>
+                            <td>Estimize EPS</td>
+                            <td>{{earningEntry.estimizeProfile.estimizeEps}}</td>
+                        </tr>
+                        <tr>
+                            <td>WS EPS</td>
+                            <td>{{earningEntry.estimizeProfile.wsEps}}</td>
+                        </tr>
+                        <tr>
+                            <td>Estimize Revenue</td>
+                            <td>{{earningEntry.estimizeProfile.estimizeRevenue}}</td>
+                        </tr>
+                        <tr>
+                            <td>WS Revenue</td>
+                            <td>{{earningEntry.estimizeProfile.wsRevenue}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a ng-href="{{earningEntry.estimizeProfile.referenceUrl}}" target="_blank">source</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

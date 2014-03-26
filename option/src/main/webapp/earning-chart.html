@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Earning Chart</title>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
+
+<style type="text/css">
+#chartIframe, #earningIframe {
+    border: none;
+    padding: 0px;
+    height: 100%;
+    position: relative;
+}
+
+.full-height {
+    height: 100%;
+}
+
+html {
+    overflow: hidden;
+}
+</style>
+
+<script type="text/javascript">
+function load() {
+    var symbolParamName = 'symbol';
+
+    var paramsText = location.search;
+    if (paramsText && paramsText.indexOf('?') === 0) {
+        paramsText = paramsText.substr(1);
+        var params = paramsText.split('&');
+
+        for (var i = 0; i < params.length; i ++) {
+            var param = params[i];
+            if (param.indexOf(symbolParamName) != -1) {
+                var symbol = param.substr(symbolParamName.length + 1);
+                showSymbol(symbol);
+
+                break;
+            }
+        }
+    }
+};
+
+function showSymbol(symbol) {
+    var chartUrl = 'http://stockcharts.com/h-sc/ui?id=p90511591179&s=' + symbol;
+    var earningHistoryUrl = 'http://www.nasdaq.com/earnings/report/' + symbol;
+
+    var earningIframe = document.getElementById('earningIframe');
+    earningIframe.setAttribute('src', earningHistoryUrl);
+    scrollDown(earningIframe, 600);
+
+    var chartIframe = document.getElementById('chartIframe');
+    chartIframe.setAttribute('src', chartUrl);
+    scrollDown(chartIframe, 100);
+}
+
+function scrollDown(iframe, top) {
+    var height = iframe.offsetHeight;
+    iframe.style.height = (height + top) + 'px';
+    iframe.style.top = '-' + top + 'px';
+}
+</script>
+
+</head>
+
+<body onload="load()">
+
+<div class="container-fluid">
+    <div class="row full-height">
+        <iframe class="col-md-6" id="earningIframe"></iframe>
+        <iframe class="col-md-6" id="chartIframe"></iframe>
+    </div>
+</div>
+
+</body>
+</html>

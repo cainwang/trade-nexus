@@ -48,7 +48,7 @@
             </tr>
             <tr ng-repeat-end ng-repeat="earningEntry in earningDay.earningEntries">
                 <td>
-                    <a href="http://stockcharts.com/h-sc/ui?s={{earningEntry.symbol}}" target="_blank">{{earningEntry.symbol}}</a>
+                    <a href="earning-chart.html?symbol={{earningEntry.symbol}}" target="_blank">{{earningEntry.symbol}}</a>
                 </td>
 
                 <td>{{earningEntry.reportTime | reportTime}}</td>

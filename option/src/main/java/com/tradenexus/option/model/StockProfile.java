@@ -44,7 +44,7 @@ public class StockProfile {
      * Parses the string to number.
      */
     public static Number parseNumber(String numberString) {
-        if (numberString.startsWith("+") || numberString.startsWith("-")) {
+        if (numberString.startsWith("+")) {
             numberString = numberString.substring(1);
         }
 

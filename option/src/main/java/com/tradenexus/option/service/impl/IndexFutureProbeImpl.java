@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
-import com.tradenexus.option.model.StockProfile;
 import com.tradenexus.option.model.IndexFutureProfile;
+import com.tradenexus.option.model.StockProfile;
 import com.tradenexus.option.service.IndexFutureProbe;
 import com.tradenexus.option.util.HtmlParser;
 
@@ -27,6 +27,7 @@ public class IndexFutureProbeImpl implements IndexFutureProbe {
 
         IndexFutureProfile profile = new IndexFutureProfile();
         String dowJonesText = parser.text("table.index_table tbody tr:nth-of-type(2) td:nth-of-type(4)");
+        System.out.println(dowJonesText);
         profile.setDowJones(StockProfile.parseDouble(dowJonesText));
 
         return profile;

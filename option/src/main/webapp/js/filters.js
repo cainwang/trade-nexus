@@ -51,13 +51,4 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
 
         return '';
     };
-}).filter('signedNumber', function() {
-    return function(input) {
-        if (!isNaN(input)) {
-            var sign = input >= 0 ? '+' : '-';
-            return sign + input;
-        }
-
-        return '';
-    };
 });

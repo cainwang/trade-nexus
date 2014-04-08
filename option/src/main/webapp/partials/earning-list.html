@@ -22,6 +22,11 @@
                 {{indexFutureProfile.dowJones}}
             </span>
         </div>
+
+        <div class="earning-tool calculator">
+            <input class="form-control" ng-model="calculatorExpression" ng-keypress="calculateExpression($event)"
+                placeholder="Enter math expression" />
+        </div>
     </div>
 
     <table class="table table-hover earning-table">

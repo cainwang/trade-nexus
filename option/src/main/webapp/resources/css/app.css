@@ -59,3 +59,19 @@ h3.earning-report-title {
 .future-down {
     color: red;
 }
+
+.calculator {
+    position: absolute;
+    right: 10px;
+    top: 3px;
+}
+
+
+.calculator input {
+    height: 24px;
+}
+
+.invalid {
+    box-shadow: 0px 0px 5px 1px rgba(255, 0, 0, 0.6) !important;
+    border-color: rgba(255, 0, 0, 0.6) !important;
+}

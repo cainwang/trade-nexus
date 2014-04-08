@@ -36,5 +36,27 @@ function earningCtrl($scope, Earnings, Profiles, Langs, Dates) {
     Profiles.findFuture(function(indexFutureProfile) {
         $scope.indexFutureProfile = indexFutureProfile;
     });
+
+    $scope.calculateExpression = function(event) {
+        if (event.which == 13) {
+            var invalid = false;
+
+            try {
+                var result = eval($scope.calculatorExpression);
+                if (isNaN(result)) {
+                    invalid = true;
+                } else {
+                    $scope.calculatorExpression = result.toFixed(3);
+                    event.target.classList.remove('invalid');
+                }
+            } catch (e) {
+                invalid = true;
+            }
+
+            if (invalid) {
+                event.target.classList.add('invalid');
+            }
+        }
+    };
 }
 controllers.controller('EarningCtrl', [ '$scope', 'Earnings', 'Profiles', 'Langs', 'Dates', earningCtrl ]);

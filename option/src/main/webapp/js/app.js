@@ -2,4 +2,5 @@
 
 /* App Module */
 
-var app = angular.module('optionNexusApp', [ 'optionNexusControllers', 'optionNexusFilters', 'optionNexusServices' ]);
+var app = angular.module('optionNexusApp', [ 'optionNexusControllers', 'optionNexusFilters', 'optionNexusServices',
+        'optionNexusDirectives' ]);

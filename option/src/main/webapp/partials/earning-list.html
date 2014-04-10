@@ -23,6 +23,8 @@
             </span>
         </div>
 
+        <span class="loading-icon" ng-show="requestCount"></span>
+
         <div class="earning-tool calculator">
             <input class="form-control" ng-model="calculatorExpression" nx-hover-focus
                 placeholder="Enter math expression" nx-enter="calculateExpression" />
@@ -46,9 +48,9 @@
         <tbody>
             <tr ng-repeat-start="earningDay in earningDays" class="earning-today">
                 <td colspan="9" class="earning-date-header">
-                    {{earningDay.date | weekDay}}
-                    <span class="glyphicon glyphicon-refresh" ng-show="earningDay.loading"></span>
+                    <span>{{earningDay.date | weekDay}}</span>
                     <span ng-show="earningDay.isToday">(Today)</span>
+                    <span class="loading-icon" ng-show="earningDay.loading"></span>
                 </td>
             </tr>
             <tr ng-repeat-end ng-repeat="earningEntry in earningDay.earningEntries">

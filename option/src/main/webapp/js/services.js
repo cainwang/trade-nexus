@@ -131,16 +131,42 @@ services.factory('Earnings', [ 'Rests', 'Profiles', 'Dates', function(Rests, Pro
     }
 } ]);
 
-services.factory('Rests', [ '$resource', function($resource) {
+services.factory('Rests', [ '$resource', '$rootScope', function($resource, $rootScope) {
     return {
         /**
          * Calls a REST API to get an object.
          */
         get: function(url, params, success, error) {
             var me = this;
+            me.increaseRequestCount($rootScope);
             $resource(url).get(params, function(response) {
                 me.processResponse(response, success);
+                me.decreaseRequestCount($rootScope);
             }, this.error);
+        },
+
+        /**
+         * Increases the global request count.
+         */
+        increaseRequestCount: function($scope) {
+            var count = $scope.requestCount;
+            if (isNaN(count)) {
+                count = 0;
+            }
+            count ++;
+            $scope.requestCount = count;
+        },
+
+        /**
+         * Decreases the global request count.
+         */
+        decreaseRequestCount: function($scope) {
+            var count = $scope.requestCount;
+            if (isNaN(count)) {
+                count = 0;
+            }
+            count --;
+            $scope.requestCount = count;
         },
 
         /**

@@ -5,8 +5,9 @@ package com.tradenexus.option.model;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.logging.Logger;
 
-import org.jsoup.helper.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Cain
@@ -43,17 +44,17 @@ public class StockProfile {
     /**
      * Parses the string to number.
      */
-    public static Number parseNumber(String numberString) {
-        if (numberString.startsWith("+")) {
-            numberString = numberString.substring(1);
+    public static Number parseNumber(String numberText) {
+        if (numberText.startsWith("+")) {
+            numberText = numberText.substring(1);
         }
 
         try {
-            if (!StringUtil.isBlank(numberString)) {
-                return NumberFormat.getInstance().parse(numberString.trim());
+            if (!StringUtils.isBlank(numberText)) {
+                return NumberFormat.getInstance().parse(numberText.trim());
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.getLogger(StockProfile.class.getName()).warning(e.getMessage());
         }
 
         return 0;

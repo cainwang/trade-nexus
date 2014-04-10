@@ -27,7 +27,6 @@ public class IndexFutureProbeImpl implements IndexFutureProbe {
 
         IndexFutureProfile profile = new IndexFutureProfile();
         String dowJonesText = parser.text("table.index_table tbody tr:nth-of-type(2) td:nth-of-type(4)");
-        System.out.println(dowJonesText);
         profile.setDowJones(StockProfile.parseDouble(dowJonesText));
 
         return profile;

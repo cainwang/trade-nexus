@@ -3,10 +3,15 @@
  */
 package com.tradenexus.option.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tradenexus.option.model.EarningEntry;
 import com.tradenexus.option.model.IndexFutureProfile;
 import com.tradenexus.option.model.StockProfile;
 import com.tradenexus.option.service.IndexFutureProbe;
+import com.tradenexus.option.service.PortfolioEarningProbe;
 import com.tradenexus.option.service.StockProfileProbe;
 
 /**
@@ -23,15 +28,20 @@ public class ProbeTest {
     }
 
     private void testProfileProbe() throws Exception {
-        Object profile = new ProbeTest().testFuture();
+        Object profile = new ProbeTest().testShort();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(System.out, profile);
     }
 
+    private List<EarningEntry> testEarnings() {
+        PortfolioEarningProbe probe = new YahooEarningProbe();
+        return probe.probe(new Date());
+    }
+
     private StockProfile testEstimize() {
         StockProfileProbe probe = new EstimizeProfileProbe();
-        return probe.probe("VMW");
+        return probe.probe("BBBY");
     }
 
     private StockProfile testMarketWatch() {

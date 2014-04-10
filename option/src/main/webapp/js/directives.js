@@ -1,12 +1,12 @@
 'use strict';
 
-/* Filters */
+/* Directives */
 
 angular.module('optionNexusDirectives', []).directive('nxEnter', function() {
     return function(scope, element, attrs) {
         element.bind('keypress', function(event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
+            if (event.which === 13) {
+                scope.$apply(function() {
                     scope[attrs.nxEnter].call(scope, event);
                 });
 

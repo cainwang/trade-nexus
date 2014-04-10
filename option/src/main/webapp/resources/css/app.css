@@ -9,6 +9,18 @@
     border-left: 3px solid #5bc0de;
 }
 
+.loading-icon {
+    display: inline-block;
+}
+
+.loading-icon:before {
+    content: url(../img/loading.gif);
+    width: 24px;
+    height: 24px;
+    position: relative;
+    top: 6px;
+}
+
 .earning-table td:first-of-type {
     padding-right: 15px;
 }
@@ -64,11 +76,6 @@ h3.earning-report-title {
     position: absolute;
     right: 10px;
     top: 3px;
-}
-
-
-.calculator input {
-    height: 24px;
 }
 
 .invalid {

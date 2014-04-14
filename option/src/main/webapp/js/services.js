@@ -24,7 +24,10 @@ services.factory('Dates', [ function() {
          * Finds the first day of the week that the specified date is in.
          */
         findFirstDayOfWeek: function(date) {
-            return new Date(date.getTime() - date.getDay() * this.TIME_DAY);
+            var date = new Date(date.getTime() - date.getDay() * this.TIME_DAY);
+            date.setHours(0);
+
+            return date;
         },
 
         /**
@@ -33,6 +36,7 @@ services.factory('Dates', [ function() {
         findWeekDays: function(date) {
             var dates = [];
             var firstDay = this.findFirstDayOfWeek(date);
+
             var time = firstDay.getTime();
 
             for (var i = 0; i < 5; i ++) {

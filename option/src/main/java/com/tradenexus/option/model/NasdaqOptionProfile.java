@@ -11,11 +11,11 @@ import java.util.Date;
  * @author Cain
  */
 public class NasdaqOptionProfile extends StockProfile {
-    private double atmPrice;
+    private double atmStrikePrice;
 
-    private double callPrice;
+    private double atmCallPrice;
 
-    private double putPrice;
+    private double atmPutPrice;
 
     private double straddleLowBound;
 
@@ -23,32 +23,32 @@ public class NasdaqOptionProfile extends StockProfile {
 
     private Date nextExpirationDate;
 
-    public NasdaqOptionProfile(String symbol, String referenceUrl) {
-        super(symbol, referenceUrl);
+    public NasdaqOptionProfile(String symbol) {
+        super(symbol);
     }
 
-    public double getAtmPrice() {
-        return atmPrice;
+    public double getAtmStrikePrice() {
+        return atmStrikePrice;
     }
 
-    public void setAtmPrice(double atmPrice) {
-        this.atmPrice = atmPrice;
+    public void setAtmStrikePrice(double atmPrice) {
+        this.atmStrikePrice = atmPrice;
     }
 
-    public double getCallPrice() {
-        return callPrice;
+    public double getAtmCallPrice() {
+        return atmCallPrice;
     }
 
-    public void setCallPrice(double callPrice) {
-        this.callPrice = callPrice;
+    public void setAtmCallPrice(double callPrice) {
+        this.atmCallPrice = callPrice;
     }
 
-    public double getPutPrice() {
-        return putPrice;
+    public double getAtmPutPrice() {
+        return atmPutPrice;
     }
 
-    public void setPutPrice(double putPrice) {
-        this.putPrice = putPrice;
+    public void setAtmPutPrice(double putPrice) {
+        this.atmPutPrice = putPrice;
     }
 
     public double getStraddleLowBound() {

@@ -30,28 +30,29 @@ public class NasdaqOptionProfileProbe implements StockProfileProbe {
 
     @Override
     public NasdaqOptionProfile probe(String symbol) {
-        String url = "http://www.nasdaq.com/symbol/" + symbol + "/option-chain?dateindex=-1";
-        logger.info("Fetching nasdaq option chain: " + url);
+        int page = 1, maxTries = 5;
+        Element atmOptionElement = null;
+        NasdaqOptionProfile profile = new NasdaqOptionProfile(symbol);
 
-        HtmlParser parser = new HtmlParser(url);
-        NasdaqOptionProfile profile = new NasdaqOptionProfile(symbol, url);
+        while (atmOptionElement == null && page < maxTries) {
+            atmOptionElement = findAtmOption(profile, symbol, page++);
+        }
 
-        Element strike = findAtmStrike(parser);
-        if (strike != null) {
-            Elements columns = strike.select("td");
+        if (atmOptionElement != null) {
+            Elements columns = atmOptionElement.select("td");
             Element strikePriceColumn = columns.get(columns.size() / 2);
             double atmStrikePrice = StockProfile.parseDouble(strikePriceColumn.text());
-            profile.setAtmPrice(atmStrikePrice);
+            profile.setAtmStrikePrice(atmStrikePrice);
 
             profile.setNextExpirationDate(parseExpirationDate(columns.first().text()));
 
             Element callPriceColumn = columns.get(1);
             double callPrice = StockProfile.parseDouble(callPriceColumn.text());
-            profile.setCallPrice(callPrice);
+            profile.setAtmCallPrice(callPrice);
 
             Element putPriceColumn = columns.get(10);
             double putPrice = StockProfile.parseDouble(putPriceColumn.text());
-            profile.setPutPrice(putPrice);
+            profile.setAtmPutPrice(putPrice);
 
             double distance = callPrice + putPrice;
             profile.setStraddleLowBound(atmStrikePrice - distance);
@@ -59,6 +60,22 @@ public class NasdaqOptionProfileProbe implements StockProfileProbe {
         }
 
         return profile;
+    }
+
+    /**
+     * Finds the ATM option info.
+     */
+    private Element findAtmOption(NasdaqOptionProfile profile, String symbol, int page) {
+        String url = "http://www.nasdaq.com/symbol/" + symbol + "/option-chain?dateindex=-1";
+        if (page > 1) {
+            url += "&page=" + page;
+        }
+        logger.info("Fetching nasdaq option chain: " + url);
+
+        profile.setReferenceUrl(url);
+        HtmlParser parser = new HtmlParser(url);
+
+        return findAtmStrike(parser);
     }
 
     /**

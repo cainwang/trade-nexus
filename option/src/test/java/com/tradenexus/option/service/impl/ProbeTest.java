@@ -28,7 +28,7 @@ public class ProbeTest {
     }
 
     private void testProfileProbe() throws Exception {
-        Object profile = new ProbeTest().testMarketWatch();
+        Object profile = new ProbeTest().testNasdaqOption();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(System.out, profile);
@@ -51,7 +51,7 @@ public class ProbeTest {
 
     private StockProfile testNasdaqOption() {
         StockProfileProbe probe = new NasdaqOptionProfileProbe();
-        return probe.probe("GOOGL");
+        return probe.probe("VMW");
     }
 
     private StockProfile testZacks() {

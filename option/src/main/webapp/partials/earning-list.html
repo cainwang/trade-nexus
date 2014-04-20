@@ -86,20 +86,20 @@
                         </tr>
                         <tr>
                             <td>ATM Strick Price</td>
-                            <td>{{earningEntry.nasdaqOptionProfile.atmPrice}}</td>
+                            <td>{{earningEntry.nasdaqOptionProfile.atmStrikePrice}}</td>
                         </tr>
                         <tr>
                             <td>ATM Call Price</td>
                             <td>
-                                {{earningEntry.nasdaqOptionProfile.callPrice}}
-                                ({{earningEntry.nasdaqOptionProfile.callPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}})
+                                {{earningEntry.nasdaqOptionProfile.atmCallPrice}}
+                                ({{earningEntry.nasdaqOptionProfile.atmCallPrice / earningEntry.nasdaqOptionProfile.atmStrikePrice | percentage}})
                             </td>
                         </tr>
                         <tr>
                             <td>ATM Put Price</td>
                             <td>
-                                {{earningEntry.nasdaqOptionProfile.putPrice}}
-                                ({{earningEntry.nasdaqOptionProfile.putPrice / earningEntry.nasdaqOptionProfile.atmPrice | percentage}})
+                                {{earningEntry.nasdaqOptionProfile.atmPutPrice}}
+                                ({{earningEntry.nasdaqOptionProfile.atmPutPrice / earningEntry.nasdaqOptionProfile.atmStrikePrice | percentage}})
                             </td>
                         </tr>
                         <tr>

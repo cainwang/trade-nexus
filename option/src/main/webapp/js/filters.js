@@ -15,7 +15,7 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
 }).filter('zacksRankColor', function() {
     return function(input) {
         return {
-            'String Buy': 'rating-buy',
+            'Strong Buy': 'rating-buy',
             'Buy': 'rating-overweight',
             'Hold': 'rating-hold',
             'Sell': 'rating-underweight',

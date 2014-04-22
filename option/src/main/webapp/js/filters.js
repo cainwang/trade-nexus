@@ -7,7 +7,7 @@ angular.module('optionNexusFilters', []).filter('reportTime', function() {
         if (input == 'Before Market Open') {
             return 'BMO';
         } else if (input == 'After Market Close') {
-            return 'AMO';
+            return 'AMC';
         }
 
         return input;

@@ -4,14 +4,12 @@
 package com.tradenexus.option.service.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,8 @@ import com.tradenexus.option.service.PortfolioEarningProbe;
 import com.tradenexus.option.util.HtmlParser;
 
 /**
- * This class finds the earning reports for the portfolio from Yahoo earning website.
+ * This class finds the earning reports for the portfolio from Yahoo earning
+ * website.
  *
  * @author cainwang
  */
@@ -50,21 +49,19 @@ public class YahooEarningProbe implements PortfolioEarningProbe {
         HtmlParser parser = new HtmlParser(url);
         Elements elements = parser.selectAll("td a[href^=http://finance.yahoo.com/q?]");
 
-        Date today = new Date();
-        for (Element element : elements) {
-            String symbol = element.text();
+        for (Element symbolElement : elements) {
+            String symbol = symbolElement.text();
             if (StringUtils.isNotBlank(symbol) && portfolioManager.isInPortfolio(symbol)) {
                 EarningEntry entry = new EarningEntry();
                 entry.setSymbol(symbol);
 
-                Element nextParentSibling = element.parent().nextElementSibling();
+                Element earningRowElement = symbolElement.parent().parent();
+                Elements values = earningRowElement.select("td");
 
                 // Past earnings don't have estimates column.
-                if (DateUtils.truncatedCompareTo(date, today, Calendar.DATE) < 0) {
-                    entry.setReportTime(nextParentSibling.text());
-                } else {
-                    entry.setReportTime(nextParentSibling.nextElementSibling().text());
-                }
+                int reportTimeColumnIndex = values.size() == 4 ? 2 : 3;
+                String reportTimeText = values.get(reportTimeColumnIndex).text();
+                entry.setReportTime(reportTimeText);
 
                 earningList.add(entry);
             }
